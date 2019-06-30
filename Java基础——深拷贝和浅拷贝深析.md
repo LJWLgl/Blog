@@ -7,7 +7,7 @@ summary:  "最近在公司的项目中用到了Java的对象拷贝(Object Copy)"
 ---
 最近在公司的项目中用到了Java的对象拷贝(Object Copy)，准备深入了解一下，试想一下如果我们不对对象拷贝，而是直接将实例赋值给新的实例会如何？
 <!-- more -->
-```
+```java
 Wheel wheel = new Wheel(20, "朝阳");
 Car car = new Car(1, "宝马", wheel);
 Car newCar = car;
@@ -27,7 +27,7 @@ Java的对象拷贝(Object Copy)，即把一个对象的属性拷贝到具有相
 简单的说了浅拷贝只是复制一个对象，传递引用，不能复制实例， 而深拷贝对对象内部的引用均复制。
 ### 浅拷贝
 浅拷贝是按位拷贝对象（是直接将一个对象的成员值拷贝过来）。如果是基本类型，拷贝的就是基本类型的值；如果属性是引用类型，则会拷贝属性的内存地址。下面的代码是调用Car的clone实现的浅拷贝。
-```
+```java
 Wheel wheel = new Wheel(20, "朝阳");
 Car car = new Car(1, "宝马", wheel);
 Car newCar = (Car) car.clone();
@@ -46,7 +46,7 @@ true
 
 ### 浅拷贝的实现
 浅拷贝的可以通过实现了Clonable接口并重写Object类的clone()方法，然后在方法内部调用super.clone()方法来实现，如下面代码所示
-```
+```java
 //浅拷贝重写clone方法
 @Override
 protected Object clone() throws CloneNotSupportedException {
@@ -55,7 +55,7 @@ protected Object clone() throws CloneNotSupportedException {
 ```
 ### 深拷贝
 深拷贝会拷贝所有的属性，并拷贝属性指向的动态分配的内存。当对象和它所引用的对象一起拷贝时即发生深拷贝，深拷贝相对浅拷贝速度较慢并且开销会更大。深拷贝的示例代码如下：
-```
+```java
 Wheel wheel = new Wheel(20, "朝阳");
 Car car = new Car(1, "宝马", wheel);
 // 对Car对象进行深拷贝
@@ -76,7 +76,7 @@ false
 ![](http://tc.ganzhiqiang.wang/33.jpg?imageMogr2/thumbnail/!70p)
 ### 深拷贝的实现
 深拷贝的最常见的实现就是将原对象的每个属性都赋值到新对象的对应的属性中，如下代码重写clone方法
-```
+```java
 @Override
 protected Object clone() throws CloneNotSupportedException {
     Wheel nWheel = (Wheel) wheel.clone();
@@ -89,7 +89,7 @@ protected Object clone() throws CloneNotSupportedException {
 }
 ```
 字段较少时，可通过通过逐个字段赋值的方式进行深拷贝，但是如果字段过多，这种方式不免有些臃肿。另一种实现深拷贝的方式就是序列化的方式来实现。如下代码所示，先把srcObj序列化成byte,再用stream去读取byte，再反序列化成cloneObj对象。需要注意的是被序列化的类都要实现Serializable接口
-```
+```java
 public static Object depthClone(Object srcObj) {
         Object cloneObj = null;
         try {

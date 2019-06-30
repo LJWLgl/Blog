@@ -10,21 +10,21 @@ summary:  "本篇文章主要介绍Java反射的基本知识，以供自己日�
 Java反射的核心是JVM在运行时才动态加载类或调用方法/访问属性，它在编译期不需要知道运行的对象是谁，Java反射实际操作对象是.class文件（字节码文件）
 ### 获得Class对象
 1.通过Class类的forName静态方法，JDBC开发中常用此方法加载驱动
-```
+```java
 Class<?> c1 = Class.forName("java.lang.Integer");
 ```
 2.通过调用对象的getClass()方法
-```
+```java
 Integer i1 = 1;
 Class<?> c2 = i1.getClass();
 ```
 3.直接获取类的class
-```
+```java
 Class<?> c3 = Integer.class;
 ```
 ### 判断是否为某个类的实例
 判断是否是某个类的实例一般用`instanceof`关键字，同时我们也可借助Class对象的`isInstance()`方法来判断，如下面的代码
-```
+```java
 Object obj = "Java";
 // 使用instanceof关键字
 System.out.println(obj instanceof  String);
@@ -32,18 +32,18 @@ System.out.println(obj instanceof  String);
 System.out.println(String.class.isInstance(obj));
 ```
 `isInstance()`方法是一个native方法，它的方法签名如下：
-```
+```java
 public native boolean isInstance(Object obj);
 ```
 ### 创建实例
 通过Java反射创建对象有两种方法：
 1.通过Class对象的newInstance方法来创建Class对象对应的实例
-```
+```java
 Class<?> c = String.class;
 Object s = c.newInstance();
 ```
 2.先通过Class对象获取指定的Constructor对象，再调用Constructor对象的newInstance方法来创建对象的实例，**通过这种方法可以指定构造器来构造对象。**
-```
+```java
 Class<?> cc = String.class;
 Constructor constructor =  cc.getConstructor(String.class);
 Object ss = constructor.newInstance("Java");
@@ -51,20 +51,20 @@ System.out.println(ss);
 ```
 ### 获取类名及变量
 直接调用Class对象的getName()即可获取类名（包含package）
-```
+```java
 Class<?> c = String.class;
 System.out.println(c.getName());
 ```
 获取类的变量有下面两种方法
 1.通过Class对象的getField方法获取类的所有变量，需要注意是getField()会获取该类及其父类的全部公有变量
-```
+```java
 // Book是自定义的类
 Class<?> c = Book.class;
 Field[] fields = c.getFields();
 
 ```
 2.如果还想获取对象的私有变量，可以通过getDeclaredFields()方法，该方法会返回该类的所有变量，不论访问权限
-```
+```java
 // Book是自定义的类
 Class<?> c = Book.class;
 Field[] fields = c.getDeclaredFields();
@@ -78,19 +78,19 @@ for (Field field : fields) {
 ### 获取方法
 获取某个Class对象的方法，主要有以下几种方法：
 1.`getDeclaredMethods`方法返回类或接口声明的所有方法，包括公共、保护、默认访问和私有方法，但不包括继续的方法。
-```
+```java
 public Method[] getDeclaredMethods() throws SecurityException
 ```
 2.`getMethods`，返回该类所有的公共的方法以及继续的类公用方法
-```
+```java
 public Method[] getMethods() throws SecurityException 
 ```
 3.`getMethod`返回一个特定的方法，第一个参数为方法名称，后面的参数是方法参数对应的Class对象
-```
+```java
 public Method getMethod(String name, Class<?>... parameterTypes)
 ```
 获取Class对象的具体列子
-```
+```java
 Class<?> cc = Book.class;
 Method[] methods = cc.getMethods();
 for (Method method : methods) {
@@ -120,12 +120,12 @@ for (Method method : methods) {
 通过`getConstructor`方法可以获取Class对象的构造器，具体的例子在上文创建实例中已经介绍过，在此不再赘述
 ### 调用方法
 当我们从一个类获取到方法之后，可以用`invoke()`方法来调用这个方法。invoke方法的签名如下：
-```
+```java
 public Object invoke(Object obj, Object... args) throws IllegalAccessException, IllegalArgumentException,
 InvocationTargetException
 ```
 invoke具体的例子：
-```
+```java
 public class Client {
     public static void main(String[] args) throws Exception {
         Class<?> c = Calculation.class;
@@ -148,7 +148,7 @@ class Calculation {
 - 变量注解
 - 参数注解
 由于篇幅限制，在此只介绍获取类的注解，其它注解的获取可以参考：[Java Reflection(八):注解](http://ifeve.com/java-reflection-8-annotation/)
-```
+```java
 public class Client {
     public static void main(String[] args) throws Exception {
         Class<?> c = Calculation.class;

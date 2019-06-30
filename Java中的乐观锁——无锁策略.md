@@ -24,13 +24,13 @@ summary:  "题主在阅读《Java高并发程序设计》一书时，了解到�
 - public volatile int value // AtomicInteger对象当前实际取值
 
 `incrementAndGet()`和`decrementAndGet()`方法类似，我们只看一下incrementAndGet方法就好，JDK1.7与JDK1.8在实现`incrementAndGet()`方法有所区别（[Java8中CAS的增强](http://ifeve.com/enhanced-cas-in-jdk8/)），下面给出的是在java8中的实现，可以看到incrementAndGet()实际调用的是`sun.misc.Unsafe.getAndAddInt`方法，Unsafe类可以理解为Java中指针，但是我们不可以直接使用，因为它是由Bootstrap类加载器加载，而非AppLoader加载。
-```
+```java
 public final int incrementAndGet() {
     return unsafe.getAndAddInt(this, valueOffset, 1) + 1;  // 
 }
 ```
 代码中的`valueOffset`代表value字段在AtomicInteger对象中的偏移量（到对象头部的偏移量），方便快速定位字段。
-```
+```java
 public final int getAndAddInt(Object obj, long l, int i)
 {
     int j;
@@ -41,11 +41,11 @@ public final int getAndAddInt(Object obj, long l, int i)
 }
 ```
 传入getAndAddInt方法的参数分别是obj(AtomicInteger对象)、l(对象内偏移量)、i(增加值)，可以看到getAndAddInt实际是一个循环，只有compareAndSwapInt返回true时，循环才能结束，并返回`j`(旧值)，下面是compareAndSwapInt方法签名，其中前面两个参数和传入getAndAddInt方法参数一致，后面expected的值是通过getIntVolatile获取的旧值，x是希望设置的新值。
-```
+```java
 public final native boolean compareAndSwapInt(Object obj, long offset, int expected, int x);
 ```
 与compareAndSwapInt方法类似，getIntVolatile()内部也是用原子操作获取AtomicInteger对象的value值，下面是该方法的签名
-```
+```java
 public native int getIntVolatile(Object obj, long l);
 ```
 CAS在JDK源码中应用广泛，下面给出其余的无锁的类：
