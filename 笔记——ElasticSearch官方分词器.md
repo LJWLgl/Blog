@@ -43,7 +43,6 @@ summary:  "梳理ES官方支持的分词器"
 - custom_token_chars（7.6新增参数）：自定义字符集
 - 详细请参考[analysis-edgengram-tokenizer](https://www.elastic.co/guide/en/elasticsearch/reference/7.7/analysis-edgengram-tokenizer.html#analysis-edgengram-tokenizer)
 
-
 ### Standard Tokenizer
 
 standard分词器使用Unicode文本分割算法（定义来源于 [Unicode Standard Annex #29](http://unicode.org/reports/tr29/)）来寻找单词之间的界限，并且输出所有界限之间的内容。由于是基于Unicode分词，standard可以很好的处理混合语言，特别是西方语言。
@@ -54,3 +53,4 @@ standard分词器使用Unicode文本分割算法（定义来源于 [Unicode Stan
 ## 参考
 - [Text analysis](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis.html)
 - [ES分析器](https://blog.csdn.net/jacksonary/article/details/83902325)
+- [Elasticsearch内置分词器及字符过滤器](https://yuanwenjian.github.io/2018/03/09/Elasticsearch%E5%86%85%E7%BD%AE%E5%88%86%E8%AF%8D%E5%99%A8%E5%8F%8A%E5%AD%97%E7%AC%A6%E8%BF%87%E6%BB%A4%E5%99%A8/)
